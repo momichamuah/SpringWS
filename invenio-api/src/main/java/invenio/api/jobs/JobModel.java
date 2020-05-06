@@ -21,7 +21,15 @@ public class JobModel {
 	Long jobID;
 	String jobTitle;
 	String jobDescription;
-	
+	int tagMatch;
+	public int getTagMatch() {
+		return tagMatch;
+	}
+
+	public void setTagMatch(int tagMatch) {
+		this.tagMatch = tagMatch;
+	}
+
 	@OneToMany(mappedBy="job", cascade=CascadeType.ALL)
 	List<TagJobModel> tags;
 	
