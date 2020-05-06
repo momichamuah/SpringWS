@@ -1,9 +1,15 @@
 package invenio.api.employer;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
+import invenio.api.jobs.JobModel;
+import invenio.api.tags.TagModel;
 import invenio.api.utils.PasswordHash;
 
 @Entity
@@ -11,16 +17,36 @@ public class EmployerModel {
 	@Id
 	@Column(length=6)
 	private String empCode;
+	public List<JobModel> getJobs() {
+		return jobs;
+	}
+
+	public void setJobs(List<JobModel> jobs) {
+		this.jobs = jobs;
+	}
 	private String empName;
 	private String empDescription;
+	@Column(unique=true)
 	private String email;
 	private String password;
 	private String hashedPassword;
 	private String telephone;
+	private String token;
+	
+	@OneToMany(mappedBy="employer", cascade=CascadeType.ALL)
+	List<JobModel> jobs;
 	
 	public EmployerModel() {}
 	
-	public EmployerModel(String empCode, String empName, String empDescription, String email, String password, String telephone) {
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public EmployerModel(String empCode, String empName, String empDescription, String email, String password, String telephone, String token) {
 		super();
 		this.empCode = empCode;
 		this.empName = empName;
@@ -28,6 +54,7 @@ public class EmployerModel {
 		this.email = email;
 		this.password = password;
 		this.telephone = telephone;
+		this.token = token;
 	}
 	
 	public String getTelephone() {
@@ -80,7 +107,7 @@ public class EmployerModel {
 	public String toString() {
 		return "EmployerModel [empCode=" + empCode + ", empName=" + empName + ", empDescription=" + empDescription
 				+ ", email=" + email + ", password=" + password + ", hashedPassword=" + hashedPassword + ", telephone="
-				+ telephone + "]";
+				+ telephone + ", token" + token + "]";
 	}
 	
 }

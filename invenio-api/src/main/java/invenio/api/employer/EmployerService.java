@@ -24,11 +24,12 @@ public class EmployerService {
 		return employerRepository.findById(code);
 		
 	}
+
 	public void addEmployer(EmployerModel employer) {
 		employerRepository.save(employer);
 	}
 	
-	public void updateEmployer(EmployerModel employer, String code) {
+	public void updateEmployer(EmployerModel employer) {
 		employerRepository.save(employer);
 		
 	}
@@ -36,6 +37,15 @@ public class EmployerService {
 		employerRepository.deleteById(code);
 	}	
 	
+	public Optional<EmployerModel> getEmployerByEmail(String email) {
+		List<EmployerModel> results = employerRepository.findByEmail(email);
+		if(results!=null && results.size()>0) {
+			Optional<EmployerModel> result = Optional.of((EmployerModel) results.toArray()[0]);
+			return (result) ;	
+		}
+		return null;
+		
+	}
 
 	public boolean loginEmployer(EmployerModel employer) {
 		String empCode = employer.getEmpCode();
