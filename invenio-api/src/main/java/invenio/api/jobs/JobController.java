@@ -27,6 +27,14 @@ public class JobController {
 		
 	}
 	
+	@RequestMapping(value="/jobs/employer/{empCode}",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.GET)	
+	@ResponseBody
+	public List<JobModel> findByEmployer(@PathVariable String empCode) {
+		System.out.println("controller empCode:" + empCode);
+		return service.findByEmployer(empCode);
+		
+	}
+	
 	@RequestMapping(value="/jobs/{JobId}",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.GET)	
 	@ResponseBody
 	public ResponseEntity<Optional<JobModel>> getJob(@PathVariable Long JobId) {

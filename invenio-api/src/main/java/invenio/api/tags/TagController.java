@@ -26,7 +26,7 @@ public class TagController {
 		return service.getAllTags();
 		
 	}
-	
+
 	@RequestMapping(value="/tags/{tag}",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.GET)	
 	@ResponseBody
 	public ResponseEntity<Optional<TagModel>> getTag(@PathVariable String tag) {

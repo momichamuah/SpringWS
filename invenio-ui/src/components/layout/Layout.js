@@ -8,6 +8,9 @@ import Emp_Signup from './../emp_signup/Emp_Signup';
 import Emp_Forgot_Password from './../emp_forgot_password/Emp_Forgot_Password';
 import Emp_Reset_Pass from './../emp_reset_pass/Emp_Reset_Pass';
 
+import Footer from './../footer/Footer';
+
+
 class Layout extends Component {
   render() {
     let routes = (
@@ -26,7 +29,7 @@ class Layout extends Component {
             <Fragment>
                 <Route path="/home" component={Emp_Landing} />
                 <Route exact path="/" component={Emp_Landing} />
-                <Route path="/employer-landing" component={Emp_Landing} />                
+                <Route path="/employer-landing" component={Emp_Landing} />  
             </Fragment>
         );
     }      
@@ -34,6 +37,7 @@ class Layout extends Component {
       <Fragment>
         <Header {...this.props} />
         {routes}
+        <Footer {...this.props} />
       </Fragment>
     );
   }

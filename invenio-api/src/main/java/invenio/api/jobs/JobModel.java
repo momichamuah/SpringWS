@@ -3,12 +3,19 @@ package invenio.api.jobs;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.CascadeType;
 
 import invenio.api.tagjob.TagJobModel;
@@ -29,10 +36,12 @@ public class JobModel {
 	public void setTagMatch(int tagMatch) {
 		this.tagMatch = tagMatch;
 	}
-
+	
+	@JsonManagedReference
 	@OneToMany(mappedBy="job", cascade=CascadeType.ALL)
 	List<TagJobModel> tags;
 	
+	@JsonBackReference
 	@ManyToOne(cascade=CascadeType.DETACH)
 	@JoinColumn(name="empCode")
 	private EmployerModel employer;

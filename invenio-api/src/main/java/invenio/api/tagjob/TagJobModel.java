@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import invenio.api.jobs.JobModel;
 import invenio.api.tags.TagModel;
 
@@ -18,6 +20,11 @@ public class TagJobModel {
 	Long id;
 	String tag;
 	String description;
+	
+	@JsonBackReference
+	@ManyToOne(cascade=CascadeType.DETACH)
+	@JoinColumn(name="jobid")
+	private JobModel job;
 	
 	public Long getId() {
 		return id;
@@ -51,7 +58,5 @@ public class TagJobModel {
 		this.job = job;
 	}
 
-	@ManyToOne(cascade=CascadeType.DETACH)
-	@JoinColumn(name="jobID")
-	private JobModel job;
+
 }

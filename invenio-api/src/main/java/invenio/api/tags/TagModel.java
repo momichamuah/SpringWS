@@ -1,14 +1,11 @@
 package invenio.api.tags;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-import invenio.api.employer.EmployerModel;
-import invenio.api.jobs.JobModel;
 
 @Entity
 public class TagModel {
@@ -16,7 +13,17 @@ public class TagModel {
 	@Column(length=50)
 	String tag;
 	String description;
+	@JsonInclude()
+	@Transient
+	String category="wip";
 	
+
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
 	public String getTag() {
 		return tag;
 	}

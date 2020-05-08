@@ -8,6 +8,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import invenio.api.jobs.JobModel;
 import invenio.api.tags.TagModel;
 import invenio.api.utils.PasswordHash;
@@ -17,13 +21,6 @@ public class EmployerModel {
 	@Id
 	@Column(length=6)
 	private String empCode;
-	public List<JobModel> getJobs() {
-		return jobs;
-	}
-
-	public void setJobs(List<JobModel> jobs) {
-		this.jobs = jobs;
-	}
 	private String empName;
 	private String empDescription;
 	@Column(unique=true)
@@ -33,19 +30,13 @@ public class EmployerModel {
 	private String telephone;
 	private String token;
 	
+	//@JsonIgnore
+	@JsonManagedReference
 	@OneToMany(mappedBy="employer", cascade=CascadeType.ALL)
 	List<JobModel> jobs;
 	
 	public EmployerModel() {}
 	
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
 	public EmployerModel(String empCode, String empName, String empDescription, String email, String password, String telephone, String token) {
 		super();
 		this.empCode = empCode;
@@ -56,7 +47,20 @@ public class EmployerModel {
 		this.telephone = telephone;
 		this.token = token;
 	}
-	
+	public List<JobModel> getJobs() {
+		return jobs;
+	}
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public void setJobs(List<JobModel> jobs) {
+		this.jobs = jobs;
+	}
 	public String getTelephone() {
 		return telephone;
 	}
