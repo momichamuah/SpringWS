@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 class Emp_Signup extends Component {
   state = {
     employerModel: {
@@ -26,6 +26,7 @@ class Emp_Signup extends Component {
           "loggedInEmployer",
           this.state.employerModel.empCode
         );
+        this.props.empLogin();
         this.props.history.push("/employer-landing");
         //axios.post('Saved');
       })
@@ -129,4 +130,4 @@ class Emp_Signup extends Component {
   }
 }
 
-export default Emp_Signup;
+export default withRouter( Emp_Signup);

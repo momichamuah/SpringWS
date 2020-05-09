@@ -12,19 +12,32 @@ import Footer from './../footer/Footer';
 
 
 class Layout extends Component {
+  state = {
+    isLoggedInEmployer: false
+  }
+
+  empLogin(){
+    this.setState({isLoggedInEmployer: true})
+  }
+
+  signout(){
+    this.setState({isLoggedInEmployer: false})
+  }
+
   render() {
     let routes = (
         <Fragment>
-            <Route path="/employer-login" component={Emp_Login} />
-            <Route path="/employer-signup" component={Emp_Signup} />
+            <Route path="/employer-login" component={() => <Emp_Login empLogin={() => this.empLogin()}  {...this.props} />} />
+            <Route path="/employer-signup" component={() => <Emp_Signup empLogin={() => this.empLogin()} {...this.props} />} />
             <Route path="/employer-forgot-password" component={Emp_Forgot_Password} />
             <Route path="/employer-reset-password" component={Emp_Reset_Pass} />
             <Route path="/home" component={Home} />
             <Route exact path="/" component={Home} />
         </Fragment>
 
-    );    
-    if (localStorage.getItem("loggedInEmployer")) {
+    );   
+    //ocalStorage.getItem("loggedInEmployer")) 
+    if (this.state.isLoggedInEmployer) {
         routes = (
             <Fragment>
                 <Route path="/home" component={Emp_Landing} />
@@ -35,7 +48,7 @@ class Layout extends Component {
     }      
     return (
       <Fragment>
-        <Header {...this.props} />
+        <Header {...this.props} signout={() => this.signout()} />
         {routes}
         <Footer {...this.props} />
       </Fragment>

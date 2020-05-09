@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import axios from "axios";
 
 class header extends Component {
     empSignOut = () => {
         localStorage.removeItem("loggedInEmployer");
+        this.props.signout()
         //this.props.history.push('/home');
     }    
     render() {
@@ -92,4 +93,4 @@ class header extends Component {
     }
 }
 
-export default header;
+export default withRouter( header);

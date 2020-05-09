@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Link } from 'react-router-dom';
+import { Link,  withRouter } from 'react-router-dom';
 class Emp_Login extends Component {
   state = {
     employerModel: {
@@ -22,12 +22,14 @@ class Emp_Login extends Component {
         localStorage.setItem("loggedInEmployer", response.data.empCode);
         console.log(localStorage.getItem("loggedInEmployer"));
         //navigate to a home page
+        console.log(response);
+        this.props.empLogin();
         this.props.history.push("/employer-landing");
         //axios.post('Saved');
         //this.props.setLoggedInUser(response.data)
       })
       .catch((error) => {
-        console.log("Signin failed");
+        console.log("Signin failed", error);
         //display some error messages
         //this.props.history.push('/signedin-failed');
       });
@@ -45,7 +47,7 @@ class Emp_Login extends Component {
   render() {
     return (
       <div className="middle formcontainer">
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={(e) => this.handleSubmit(e)}>
           <h2>Employer Sign In</h2>
           <div className="form-group">
             <label htmlFor="username" className="sr-only">
@@ -88,4 +90,4 @@ class Emp_Login extends Component {
   }
 }
 
-export default Emp_Login;
+export default withRouter( Emp_Login);
