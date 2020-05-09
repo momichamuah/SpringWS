@@ -5,9 +5,16 @@ import axios from "axios";
 class header extends Component {
     empSignOut = () => {
         localStorage.removeItem("loggedInEmployer");
-        this.props.signout()
+        this.props.empSignout();
         //this.props.history.push('/home');
-    }    
+    } 
+    jobSeekerSignout = () => {
+        localStorage.removeItem("loggedInJobSeeker");
+        localStorage.removeItem("loggedInJobSeekerName");
+        this.props.jobSeekerSignout();
+        //this.props.history.push('/home');
+    } 
+
     render() {
         let emp_link = (
             <Link to="/employer-login" className="nav-link">
@@ -28,7 +35,15 @@ class header extends Component {
             jobseeker_link =""
             
         }
-   
+        if(localStorage.getItem("loggedInJobSeeker")) {
+            jobseeker_link = (
+                <Link to="/home" className="nav-link" onClick={this.jobSeekerSignout}>
+                    Sign Out, {localStorage.getItem("loggedInJobSeekerName")}
+                </Link>
+            )
+            emp_link =""
+            
+        }
         return (
             <div className="mb-5">
                 <nav

@@ -10,20 +10,32 @@ import Emp_Reset_Pass from './../emp_reset_pass/Emp_Reset_Pass';
 
 import Footer from './../footer/Footer';
 
+import JobSeekerLanding from "../jobseeker/jobseeker_landing/JobSeekerLanding";
+import JobSeekerLogin from "../jobseeker/jobseeker_login/JobSeekerLogin";
+import JobSeekerSignup from "../jobseeker/jobseeker_signup/JobSeekerSignup";
+
 
 class Layout extends Component {
   state = {
-    isLoggedInEmployer: false
+    isLoggedInEmployer: false,
+    isLoggedInJobSeeker: false
   }
 
   empLogin(){
     this.setState({isLoggedInEmployer: true})
   }
-
-  signout(){
-    this.setState({isLoggedInEmployer: false})
+  jobSeekerLogin(){
+    this.setState({isLoggedInJobSeeker: true})
   }
 
+  empSignout(){
+    this.setState({isLoggedInEmployer: false});
+    localStorage.removeItem("loggedInEmployer");
+  }
+  jobSeekerSignout(){
+    this.setState({isLoggedInJobSeeker: false});
+    localStorage.removeItem("loggedInJobSeeker");
+  }
   render() {
     let routes = (
         <Fragment>
@@ -31,6 +43,8 @@ class Layout extends Component {
             <Route path="/employer-signup" component={() => <Emp_Signup empLogin={() => this.empLogin()} {...this.props} />} />
             <Route path="/employer-forgot-password" component={Emp_Forgot_Password} />
             <Route path="/employer-reset-password" component={Emp_Reset_Pass} />
+            <Route path="/jobseeker-login" component={() => <JobSeekerLogin jobSeekerLogin={() => this.jobSeekerLogin()}  {...this.props} />} />
+            <Route path="/jobseeker-signup" component={() => <JobSeekerSignup jobSeekerLogin={() => this.jobSeekerLogin()} {...this.props} />} />            
             <Route path="/home" component={Home} />
             <Route exact path="/" component={Home} />
         </Fragment>
@@ -45,10 +59,19 @@ class Layout extends Component {
                 <Route path="/employer-landing" component={Emp_Landing} />  
             </Fragment>
         );
-    }      
+    }   
+    if (this.state.isLoggedInJobSeeker) {
+      routes = (
+          <Fragment>
+              <Route path="/home" component={JobSeekerLanding} />
+              <Route exact path="/" component={JobSeekerLanding} />
+              <Route path="/jobseeker-landing" component={JobSeekerLanding} />  
+          </Fragment>
+      );
+  }        
     return (
       <Fragment>
-        <Header {...this.props} signout={() => this.signout()} />
+        <Header {...this.props} empSignout={() => this.empSignout()} jobSeekerSignout={() => this.jobSeekerSignout()}/>
         {routes}
         <Footer {...this.props} />
       </Fragment>

@@ -11,34 +11,33 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmployerService {
 	@Autowired
-	private EmployerRepository employerRepository;
+	private EmployerRepository repository;
 	
 	public List<EmployerModel> getAllEmployers(){
-		//return topics;
 		List<EmployerModel> employers = new ArrayList<>(); 
-		employerRepository.findAll()
+		repository.findAll()
 		.forEach(employers::add);
 		return employers;
 	}
 	public Optional<EmployerModel> getEmployer(String code) {
-		return employerRepository.findById(code);
+		return repository.findById(code);
 		
 	}
 
 	public void addEmployer(EmployerModel employer) {
-		employerRepository.save(employer);
+		repository.save(employer);
 	}
 	
 	public void updateEmployer(EmployerModel employer) {
-		employerRepository.save(employer);
+		repository.save(employer);
 		
 	}
 	public void deleteEmployer(String code) {
-		employerRepository.deleteById(code);
+		repository.deleteById(code);
 	}	
 	
 	public Optional<EmployerModel> getEmployerByEmail(String email) {
-		List<EmployerModel> results = employerRepository.findByEmail(email);
+		List<EmployerModel> results = repository.findByEmail(email);
 		if(results!=null && results.size()>0) {
 			Optional<EmployerModel> result = Optional.of((EmployerModel) results.toArray()[0]);
 			return (result) ;	
@@ -50,7 +49,7 @@ public class EmployerService {
 	public boolean loginEmployer(EmployerModel employer) {
 		String empCode = employer.getEmpCode();
 		String password = employer.getPassword();
-		Optional<EmployerModel> result= employerRepository.findById(empCode);
+		Optional<EmployerModel> result= repository.findById(empCode);
 		if(result.isPresent() && result.get().hashMatch(password)==true) {
 			return true; 
 		}

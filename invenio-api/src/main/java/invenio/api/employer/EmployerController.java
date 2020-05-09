@@ -25,42 +25,42 @@ import org.springframework.ui.Model;
 @RestController
 public class EmployerController {
 	@Autowired
-	private EmployerService employerService;
+	private EmployerService service;
 	@Autowired
 	private WebUtils webUtils;	
 	
 	@RequestMapping("/employers")
 	public List<EmployerModel> getAllEmployers() {
-		return employerService.getAllEmployers();
+		return service.getAllEmployers();
 		
 	}
 	
 	@RequestMapping(value="/employers/{code}",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.GET)	
 	@ResponseBody
 	public ResponseEntity<Optional<EmployerModel>> getEmployer(@PathVariable String code) {
-		return new ResponseEntity<>(employerService.getEmployer(code),HttpStatus.OK);
+		return new ResponseEntity<>(service.getEmployer(code),HttpStatus.OK);
 		
 		
 	}
 	@RequestMapping(method=RequestMethod.POST, value="/employers")
 	public void addEmployer(@RequestBody EmployerModel employer) {
-		employerService.addEmployer(employer);
+		service.addEmployer(employer);
 		
 	} 
 	
 	@RequestMapping(method=RequestMethod.PUT, value="/employers")
 	public void updateEmployer(@RequestBody EmployerModel employer) {
-		employerService.updateEmployer(employer);
+		service.updateEmployer(employer);
 		
 	}		
 	@RequestMapping(method=RequestMethod.DELETE, value="/employers/{code}")
 	public void deleteEmployer(@PathVariable String code) {
-		employerService.deleteEmployer(code);
+		service.deleteEmployer(code);
 	}	
 	@RequestMapping(value="/employers/email/{email}",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.GET)	
 	@ResponseBody
 	public ResponseEntity<Optional<EmployerModel>> getEmployerByEmail(@PathVariable String email) {
-		Optional<EmployerModel> result = employerService.getEmployerByEmail(email);
+		Optional<EmployerModel> result = service.getEmployerByEmail(email);
 		if(result!=null) {
 			return new ResponseEntity<>( result, HttpStatus.OK);
 		}
@@ -73,14 +73,14 @@ public class EmployerController {
 			value="/employers/forgetpassword")
 	public ResponseEntity forgetpassword(@RequestBody EmployerModel model) {
 		try {
-			Optional<EmployerModel> result = employerService.getEmployerByEmail(model.getEmail());
+			Optional<EmployerModel> result = service.getEmployerByEmail(model.getEmail());
 			System.out.println(model.getEmail());
 			if(result.isPresent()){
 				EmployerModel usr=result.get();
 				Random random = new Random();
 				String token = String.format("%04d", random.nextInt(10000));			
 				usr.setToken(token);
-				employerService.updateEmployer(usr);
+				service.updateEmployer(usr);
 				webUtils.sendMail(usr.getEmail(), "Please use this token to reset your password "+token, "Password Reset");
 			}else {
 				 //model.addAttribute("error", "No user account found with "+model.getEmail()); 
@@ -110,13 +110,13 @@ public class EmployerController {
 				    //model.addAttribute("error", "Password should be at least 8 characters, lower case, upper case and a special character."); 
 					//model.addAttribute("email", email); 
 			
-				Optional<EmployerModel> result = employerService.getEmployerByEmail(email);
+				Optional<EmployerModel> result = service.getEmployerByEmail(email);
 				if(result.isPresent()){
 					EmployerModel usr=result.get();
 					if(token.equals(usr.getToken())) {
 				    	usr.setToken("");
 				    	usr.setPassword(password);
-				    	employerService.updateEmployer(usr);
+				    	service.updateEmployer(usr);
 	
 						//red.addFlashAttribute("success", "Password reset success thanks, please contact admin if you did not perform this change");
 						//webUtils.sendMail(email, "Password reset success thanks, please contact admin if you did not perform this change", "Password Reset");
@@ -148,7 +148,7 @@ public class EmployerController {
 			method = RequestMethod.POST)
 			public ResponseEntity<Optional<EmployerModel>>  loginEmployer(@RequestBody EmployerModel employer) {
 			Optional<EmployerModel> result = Optional.ofNullable(employer);
-			if(employerService.loginEmployer(employer)) {
+			if(service.loginEmployer(employer)) {
 				return new ResponseEntity<>(result, HttpStatus.OK); 
 			}
 			else {

@@ -23,7 +23,7 @@ public class TagJobModel {
 	
 	@JsonBackReference
 	@ManyToOne(cascade=CascadeType.DETACH)
-	@JoinColumn(name="jobid")
+	@JoinColumn(name="jobID")
 	private JobModel job;
 	
 	public Long getId() {
