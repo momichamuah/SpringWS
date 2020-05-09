@@ -31,14 +31,14 @@ class JobSeekerSignup extends Component {
                 //store the LoggedInUser
                 localStorage.setItem(
                     "loggedInJobSeeker",
-                    this.state.jobSeekerModel
+                    this.state.jobSeekerModel.jsId
                 );
                 localStorage.setItem(
                     "loggedInJobSeekerName",
                     this.state.jobSeekerModel.firstName + " " + this.state.jobSeekerModel.lastName
                 );
 
-                //this.props.empLogin();
+                this.props.jobSeekerLogin();
                 this.props.history.push("/jobseeker-landing");
                 //axios.post('Saved');
             })

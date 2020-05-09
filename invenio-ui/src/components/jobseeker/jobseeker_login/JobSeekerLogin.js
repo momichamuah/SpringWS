@@ -35,7 +35,7 @@ class JobSeekerLogin extends Component {
                   });
                 localStorage.setItem(
                     "loggedInJobSeeker",
-                    this.state.jobSeekerModel
+                    this.state.jobSeekerModel.jsId
                 );
                 localStorage.setItem(
                     "loggedInJobSeekerName",
@@ -45,7 +45,7 @@ class JobSeekerLogin extends Component {
                 console.log(localStorage.getItem("loggedInJobSeekerName"));
                 //navigate to a home page
                 console.log(response);
-                //this.props.empLogin();
+                this.props.jobSeekerLogin();
                 this.props.history.push("/jobseeker-landing");
                 //axios.post('Saved');
                 //this.props.setLoggedInUser(response.data)
