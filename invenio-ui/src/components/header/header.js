@@ -1,19 +1,19 @@
 import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import axios from "axios";
-
+import Logo1 from "../images/logo.svg";
 class header extends Component {
     empSignOut = () => {
         localStorage.removeItem("loggedInEmployer");
         this.props.empSignout();
         //this.props.history.push('/home');
-    } 
+    }
     jobSeekerSignout = () => {
         localStorage.removeItem("loggedInJobSeeker");
         localStorage.removeItem("loggedInJobSeekerName");
         this.props.jobSeekerSignout();
         //this.props.history.push('/home');
-    } 
+    }
 
     render() {
         let emp_link = (
@@ -21,39 +21,42 @@ class header extends Component {
                 Post a Job
             </Link>
         )
-        let jobseeker_link= (
+        let jobseeker_link = (
             <Link to="/jobseeker-login" className="nav-link">
-            Jobseeker Login
+                Jobseeker Login
             </Link>
         )
-        if(localStorage.getItem("loggedInEmployer")) {
+        if (localStorage.getItem("loggedInEmployer")) {
             emp_link = (
                 <Link to="/home" className="nav-link" onClick={this.empSignOut}>
                     Sign Out, {localStorage.getItem("loggedInEmployer")}
                 </Link>
             )
-            jobseeker_link =""
-            
+            jobseeker_link = ""
+
         }
-        if(localStorage.getItem("loggedInJobSeeker")) {
+        if (localStorage.getItem("loggedInJobSeeker")) {
             jobseeker_link = (
                 <Link to="/home" className="nav-link" onClick={this.jobSeekerSignout}>
                     Sign Out, {localStorage.getItem("loggedInJobSeekerName")}
                 </Link>
             )
-            emp_link =""
-            
+            emp_link = ""
+
         }
         return (
+            
             <div className="mb-5">
+               
                 <nav
                     className="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light"
                     id="ftco-navbar"
                 >
                     <div className="container">
-                        <a className="navbar-brand" href="index.html">
-                            I N V E N I O
-            </a>
+                        
+                        <a className="navbar-brand" href="index.html" >
+                        {/* <img src={Logo1} /> */}<span style={{ color: '#6c63ff' }}>I N V E N I O</span>                
+                        </a>
                         <button
                             className="navbar-toggler"
                             type="button"
@@ -108,4 +111,4 @@ class header extends Component {
     }
 }
 
-export default withRouter( header);
+export default withRouter(header);

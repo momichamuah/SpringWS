@@ -70,7 +70,7 @@ class JobSeekerLogin extends Component {
         return (
             <div className="middle formcontainer">
                 <form onSubmit={(e) => this.handleSubmit(e)}>
-                    <h2>JobSeeker Sign In</h2>
+                    <h2 style={{ color: '#ff6347' }}>JobSeeker Sign In</h2>
                     <div className="form-group">
                         <label htmlFor="email" className="sr-only">
                             Email
@@ -94,10 +94,10 @@ class JobSeekerLogin extends Component {
                         placeholder="Password"
                         aria-label="Password"
                     />
-                    <div className="form-group">
+                    <div className="form-group" >
                         <p>
-                            Not registered? <Link to="/jobseeker-signup">Sign Up</Link> |{" "}
-                            <Link to="/jobseeker-forgot-password">Forgot Password?</Link>
+                            <span style={{ color: '#ff6347' }}>Not registered?<Link to="/jobseeker-signup">Sign Up</Link> |{" "}
+                            <Link to="/jobseeker-forgot-password">Forgot Password?</Link></span>
                         </p>
                     </div>
                     <button

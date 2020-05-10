@@ -31,10 +31,12 @@ class Layout extends Component {
   empSignout(){
     this.setState({isLoggedInEmployer: false});
     localStorage.removeItem("loggedInEmployer");
+    this.props.history.push('/');
   }
   jobSeekerSignout(){
     this.setState({isLoggedInJobSeeker: false});
     localStorage.removeItem("loggedInJobSeeker");
+    localStorage.removeItem("loggedInJobSeekerName");
   }
   render() {
     let routes = (
@@ -56,7 +58,7 @@ class Layout extends Component {
             <Fragment>
                 <Route path="/home" component={Emp_Landing} />
                 <Route exact path="/" component={Emp_Landing} />
-                <Route path="/employer-landing" component={Emp_Landing} />  
+                <Route path="/employer-landing" component={() => <Emp_Landing empSignout={() => this.empSignout()}  {...this.props} />} />
             </Fragment>
         );
     }   
@@ -65,7 +67,7 @@ class Layout extends Component {
           <Fragment>
               <Route path="/home" component={JobSeekerLanding} />
               <Route exact path="/" component={JobSeekerLanding} />
-              <Route path="/jobseeker-landing" component={JobSeekerLanding} />  
+              <Route path="/jobseeker-landing" component={() => <JobSeekerLanding jobSeekerSignout={() => this.jobSeekerSignout()}  {...this.props} />} />
           </Fragment>
       );
   }        
@@ -79,4 +81,4 @@ class Layout extends Component {
   }
 }
 
-export default Layout;
+export default withRouter(Layout);

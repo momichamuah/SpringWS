@@ -3,21 +3,23 @@ import { Link, Route, withRouter } from "react-router-dom";
 import Add_Job from './../add_job/Add_Job';
 import Emp_Job_List from './../emp_job_list/Emp_Job_List';
 class Emp_Landing extends Component {
-    empSignOut = () => {
+    /*  empSignOutA = () => {
         localStorage.removeItem("loggedInEmployer");
         this.setState({ state: this.state });
+        this.empSignOut();
         this.props.history.push('/home');
-    }      
+    }    */    
     render() {
         return (
       
             <div className="container-fluid home-margin-top-less-200px">
                       <div>
                 <h1>For Employer</h1>
-                <Link to="/home" className="nav-link" onClick={this.empSignOut}>
+                {localStorage.getItem("loggedInEmployer")}
+{/*                 <Link to="/home" className="nav-link" onClick={this.empSignOut}>
                     Sign Out, {localStorage.getItem("loggedInEmployer")}
                 </Link>                
-            </div>
+ */}            </div>
             <div className="row">
                 <nav className="col-md-2 d-none d-md-block bg-light sidebar">
                     <div className="sidebar-sticky">
