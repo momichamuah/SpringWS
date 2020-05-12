@@ -91,7 +91,7 @@ class ApplyJobs extends Component {
       jobjobseeker: tempjobjobseeker,
     });
     console.log(this.state.jobjobseeker);
-    alert(alreadyapplied);
+    //alert(alreadyapplied);
     if (alreadyapplied === false) {
       axios
         .post(
