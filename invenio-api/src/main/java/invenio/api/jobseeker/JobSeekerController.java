@@ -167,7 +167,7 @@ public class JobSeekerController {
 	}
 
 	@RequestMapping(value = "/jobseekers/profileimage/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
-	public ResponseEntity addprofileImg(@RequestParam("file") MultipartFile file, @PathVariable Long id) {
+	public ResponseEntity<Object> addprofileImg(@RequestParam("file") MultipartFile file, @PathVariable Long id) {
 
 		Pattern ext = Pattern.compile("([^\\s]+(\\.(?i)(png|jpg|pdf|gif))$)");
 		try {
@@ -187,12 +187,12 @@ public class JobSeekerController {
 			// save image
 			webUtils.addProfilePhoto(file, id, "jobseekers");
 			String msg = "Upload success " + file.getSize() + " KB";
-			return new ResponseEntity<>(msg, HttpStatus.OK);
+			return new ResponseEntity<>( service.getJobSeeker(id).get(), HttpStatus.OK);
 
 		} catch (Exception e) {
 			// e.printStackTrace);
 		}
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<>( service.getJobSeeker(id).get(), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/jobseekers/profileimage/{id}", method = RequestMethod.GET)

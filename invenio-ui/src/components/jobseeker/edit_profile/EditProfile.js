@@ -5,6 +5,7 @@ class EditProfile extends Component {
   state = {
     jobSeekerModel: [],
     selectedFile: null,
+    uploadedFile: undefined
   };
   componentDidMount() {
     axios
@@ -13,24 +14,26 @@ class EditProfile extends Component {
           localStorage.getItem("loggedInJobSeeker")
       )
       .then((response) => {
+        console.log("USEr ::> ", response.data)
         this.setState({
           jobSeekerModel: response.data,
+          uploadedFile: response.data.image,
         });
       });
 
-     axios.get("http://localhost:5001/invenio/jobseekers/profileimage/" + localStorage.getItem("loggedInJobSeeker"))
-    .then((response) => {
-            console.log("image found");
-            console.log(response.data);
-            this.setState({
-                selectedFile: response.data,
-              });
-              console.log(this.state.selectedFile);
-        }
-     ).catch((error) => {
-        //display some error messages
-        console.log("error in getting image");
-      });
+    //  axios.get("http://localhost:5001/invenio/jobseekers/profileimage/" + localStorage.getItem("loggedInJobSeeker"))
+    // .then((response) => {
+    //         console.log("image found");
+    //         console.log(response);
+    //         this.setState({
+    //             uploadedFile: response.data,
+    //           });
+    //           console.log(this.state.selectedFile);
+    //     }
+    //  ).catch((error) => {
+    //     //display some error messages
+    //     console.log("error in getting image");
+    //   });
   }
   handleSubmit = (event) => {
     //prevent query string from displaying on the browser
@@ -76,7 +79,10 @@ class EditProfile extends Component {
         formData
       )
       .then((res) => {
-        console.log(res.data);
+        console.log("Image ::> ", res.data);
+        this.setState({
+          uploadedFile: res.data.image,
+        });
         alert("File uploaded successfully.");
       });
   };
@@ -86,7 +92,7 @@ class EditProfile extends Component {
     this.setState({
       selectedFile: e.target.files[0],
     });
-    console.log("file:" + this.state.selectedFile);
+    console.log("file:", e.target.files[0]);
 
   };
 
@@ -108,7 +114,7 @@ class EditProfile extends Component {
               <tr>
                 <td>Profile Picture</td>
                 <td>
-                  <img src={this.state.selectedFile} alt="" />
+                  { this.state.uploadedFile ? <img src={`${process.env.PUBLIC_URL}/images/upload/jobseekers/${localStorage.getItem("loggedInJobSeeker")}/profile/${this.state.uploadedFile}`} alt="" /> : ""}
                 </td>
               </tr>
               <tr>

@@ -90,7 +90,7 @@ class Emp_Reset_Pass extends Component {
             placeholder="Password"
             aria-label="Password"
           />
-          <input
+{/*           <input
             onChange={this.handleChange}
             value={this.state.confirm_password}
             name="confirm_password"
@@ -98,7 +98,7 @@ class Emp_Reset_Pass extends Component {
             type="password"
             placeholder="Confirm Password"
             aria-label="Confirm Password"
-          />
+          /> */}
           <div className="form-group">
             <p>
               Not registered? <Link to="/employer-signup">Sign Up</Link> |{" "}

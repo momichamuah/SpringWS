@@ -40,7 +40,8 @@ public class WebUtils {
 	@Autowired
 	private JobSeekerRepository usersRepository;
 
-	private static final String UPLOADED_FOLDER = "static" + File.separator + "images";
+//	private static final String UPLOADED_FOLDER = "static" + File.separator + "images";
+	private static final String UPLOADED_FOLDER = "C://SpringWS//invenio-ui//public//images//upload";
 
 	public void sendMail(String to, String msg, String subject) {
 		MimeMessage message = sender.createMimeMessage();
@@ -64,7 +65,7 @@ public class WebUtils {
 		try {
 			// save dir
 			// request.getSession().getServletContext().getRealPath(UPLOADED_FOLDER)
-			String destDir = "c:/temp/images" + File.separator + folder + File.separator + id + File.separator
+			String destDir = UPLOADED_FOLDER + File.separator + folder + File.separator + id + File.separator
 					+ "profile" + File.separator;
 			log.info("This is path {}", destDir);
 
@@ -96,6 +97,7 @@ public class WebUtils {
 			multipartFile.transferTo(destination);
 			usersRepository.findById(id).ifPresent(a -> {
 				a.setImage(parseMd5);
+				usersRepository.save(a);
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -105,7 +107,7 @@ public class WebUtils {
 	public Resource GetImageResource(Long id, String folder) {
 		try {
 			usersRepository.findById(id).map(a -> {
-				String filePath = "c:/temp/images" + File.separator + folder + File.separator + id + File.separator
+				String filePath = UPLOADED_FOLDER + File.separator + folder + File.separator + id + File.separator
 						+ "profile" + File.separator + a.getImage();
 				log.info(filePath);
 				File file = new File(filePath);
