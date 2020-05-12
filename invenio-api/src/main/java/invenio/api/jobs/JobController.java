@@ -34,6 +34,13 @@ public class JobController {
 		return service.findByEmployer(empCode);
 		
 	}
+	@RequestMapping(value="/jobs/jobseeker/{jsID}",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.GET)	
+	@ResponseBody
+	public List<JobModel> findByJobSeeker(@PathVariable Long jsID) {
+		System.out.println("controller jsID:" + jsID);
+		return service.findByJobSeeker(jsID);
+		
+	}
 	
 	@RequestMapping(value="/jobs/{JobId}",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.GET)	
 	@ResponseBody

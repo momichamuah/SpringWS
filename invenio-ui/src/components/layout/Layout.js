@@ -4,6 +4,9 @@ import Header from "../header/header";
 import Emp_Login from "../emp_login/Emp_Login";
 import Emp_Landing from './../emp_landing/Emp_Landing';
 import Home from './../home/Home';
+import About from './../about/About';
+import Candidates from './../candidates/Candidates';
+
 import Emp_Signup from './../emp_signup/Emp_Signup';
 import Emp_Forgot_Password from './../emp_forgot_password/Emp_Forgot_Password';
 import Emp_Reset_Pass from './../emp_reset_pass/Emp_Reset_Pass';
@@ -13,6 +16,8 @@ import Footer from './../footer/Footer';
 import JobSeekerLanding from "../jobseeker/jobseeker_landing/JobSeekerLanding";
 import JobSeekerLogin from "../jobseeker/jobseeker_login/JobSeekerLogin";
 import JobSeekerSignup from "../jobseeker/jobseeker_signup/JobSeekerSignup";
+import Blog from './../blog/Blog';
+import ContactUs from './../contactus/ContactUs';
 
 
 class Layout extends Component {
@@ -48,6 +53,10 @@ class Layout extends Component {
             <Route path="/jobseeker-login" component={() => <JobSeekerLogin jobSeekerLogin={() => this.jobSeekerLogin()}  {...this.props} />} />
             <Route path="/jobseeker-signup" component={() => <JobSeekerSignup jobSeekerLogin={() => this.jobSeekerLogin()} {...this.props} />} />            
             <Route path="/home" component={Home} />
+            <Route path="/about" component={About} />
+            <Route path="/candidates" component={Candidates} />
+            <Route path="/blog" component={Blog} />
+            <Route path="/contact" component={ContactUs} />
             <Route exact path="/" component={Home} />
         </Fragment>
 

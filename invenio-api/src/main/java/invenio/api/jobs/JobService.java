@@ -52,4 +52,8 @@ public class JobService {
 	public void deleteJob(Long jobId) {
 		jobRepository.deleteById(jobId);
 	}
+	public List<JobModel> findByJobSeeker(Long jsID) {
+
+		return jobRepository.findByJobSeeker(jsID);
+}
 }

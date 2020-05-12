@@ -17,6 +17,8 @@ import javax.xml.bind.DatatypeConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -34,10 +36,10 @@ public class WebUtils {
 	@Autowired
 	private JavaMailSender sender;
 	@Autowired
-    HttpServletRequest request;
+	HttpServletRequest request;
 	@Autowired
-	private JobSeekerRepository usersRepository;	
-	
+	private JobSeekerRepository usersRepository;
+
 	private static final String UPLOADED_FOLDER = "static" + File.separator + "images";
 
 	public void sendMail(String to, String msg, String subject) {
@@ -61,8 +63,9 @@ public class WebUtils {
 	public void addProfilePhoto(MultipartFile file, long id, String folder) throws IllegalStateException, IOException {
 		try {
 			// save dir
-			String destDir = request.getSession().getServletContext().getRealPath(UPLOADED_FOLDER) + File.separator
-					+ folder + File.separator + id + File.separator + "profile";
+			// request.getSession().getServletContext().getRealPath(UPLOADED_FOLDER)
+			String destDir = "c:/temp/images" + File.separator + folder + File.separator + id + File.separator
+					+ "profile" + File.separator;
 			log.info("This is path {}", destDir);
 
 			// innitalize file
@@ -85,6 +88,10 @@ public class WebUtils {
 			// rename file to md5
 			String parseMd5 = md5(fileName.toLowerCase());
 			File destination = new File(destDir + File.separator + parseMd5);
+			if (!destination.exists()) {
+				new File(destDir + File.separator + parseMd5).mkdirs();
+			}
+
 			// save to file system and db
 			multipartFile.transferTo(destination);
 			usersRepository.findById(id).ifPresent(a -> {
@@ -94,58 +101,98 @@ public class WebUtils {
 			e.printStackTrace();
 		}
 	}
-	
-	   public void deletefolder(long id) throws IllegalStateException, IOException {
-		      try {
-				 String destDir = request.getSession().getServletContext().getRealPath(UPLOADED_FOLDER)+ File.separator +"users"+ File.separator +id;
-		    	 log.info("This is path {}", destDir);
-		    	 //innitalize file	    	 
-				 File dir = new File(destDir);
-				   if(dir.isDirectory()){                                    	 
-					   FileSystemUtils.deleteRecursively(dir);                              
-					}			 
-				  }catch (Exception e){
-				   e.printStackTrace();
-				}				 
-		   }		
-		 	   
-		   public String removefiles(long id, String image, String folder) {
-			try {
-				String realPathtoUploads = 
-			    request.getSession().getServletContext()
-			    .getRealPath(UPLOADED_FOLDER+ File.separator +folder);			
-				File file = new File(realPathtoUploads + File.separator 
-						+ id+ File.separator +image+"");    		
-		 	    file.delete();
-			   }catch (Exception e){
-				e.printStackTrace();
-				return "Delete operation is failed.";
-			   }
-			return "Delete Success.";
-		   }
-		   
-		   public void getFiles(Model model, long id, String folder) {
-		    	List<String> results = new ArrayList<String>();
-				try {
-					String realPathtoUploads = 
-					request.getSession().getServletContext().getRealPath(UPLOADED_FOLDER+ File.separator +folder);						
-					File[] files = new File(realPathtoUploads + File.separator + id).listFiles();
-				    for (File file : files) {
-					  if (file.isFile()) {
-					      results.add(file.getName());
-					      model.addAttribute("filenames", results);
-					  }				   
-					}
-				}catch (Exception e) {
-				// TODO Auto-generated catch block
-				 e.printStackTrace();
-				}
-		    }
-		   
-		   public String md5(String filename) throws NoSuchAlgorithmException, UnsupportedEncodingException{
-			    String hash = DatatypeConverter.printHexBinary(MessageDigest.getInstance("MD5").digest(filename.getBytes("UTF-8")));
-				return hash;
-		   }
 
+	public Resource GetImageResource(Long id, String folder) {
+		try {
+			usersRepository.findById(id).map(a -> {
+				String filePath = "c:/temp/images" + File.separator + folder + File.separator + id + File.separator
+						+ "profile" + File.separator + a.getImage();
+				log.info(filePath);
+				File file = new File(filePath);
+				if (file.exists()) {
+					log.info("file exists");
+				}
+				Resource resource = new FileSystemResource(file);
+				try {
+					log.info(Long.toString(resource.contentLength()));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return resource;
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public String GetImagePath(Long id, String folder) {
+		try {
+			usersRepository.findById(id).map(a -> {
+				String filePath = "c:/temp/images" + File.separator + folder + File.separator + id + File.separator
+						+ "profile" + File.separator + a.getImage();
+				log.info(filePath);
+				
+				return filePath;
+			});
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void deletefolder(long id) throws IllegalStateException, IOException {
+		try {
+			String destDir = request.getSession().getServletContext().getRealPath(UPLOADED_FOLDER) + File.separator
+					+ "users" + File.separator + id;
+			log.info("This is path {}", destDir);
+			// innitalize file
+			File dir = new File(destDir);
+			if (dir.isDirectory()) {
+				FileSystemUtils.deleteRecursively(dir);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public String removefiles(long id, String image, String folder) {
+		try {
+			String realPathtoUploads = request.getSession().getServletContext()
+					.getRealPath(UPLOADED_FOLDER + File.separator + folder);
+			File file = new File(realPathtoUploads + File.separator + id + File.separator + image + "");
+			file.delete();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Delete operation is failed.";
+		}
+		return "Delete Success.";
+	}
+
+	public void getFiles(Model model, long id, String folder) {
+		List<String> results = new ArrayList<String>();
+		try {
+			String realPathtoUploads = request.getSession().getServletContext()
+					.getRealPath(UPLOADED_FOLDER + File.separator + folder);
+			File[] files = new File(realPathtoUploads + File.separator + id).listFiles();
+			for (File file : files) {
+				if (file.isFile()) {
+					results.add(file.getName());
+					model.addAttribute("filenames", results);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public String md5(String filename) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+		String hash = DatatypeConverter
+				.printHexBinary(MessageDigest.getInstance("MD5").digest(filename.getBytes("UTF-8")));
+		return hash;
+	}
 
 }

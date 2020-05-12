@@ -30,6 +30,7 @@ class Emp_Login extends Component {
       })
       .catch((error) => {
         console.log("Signin failed", error);
+        alert("Invalid Email/Password");
         //display some error messages
         //this.props.history.push('/signedin-failed');
       });
@@ -48,7 +49,7 @@ class Emp_Login extends Component {
     return (
       <div className="middle formcontainer">
         <form onSubmit={(e) => this.handleSubmit(e)}>
-          <h2>Employer Sign In</h2>
+          <h2 style={{ color: '#6c63ff' }}>Employer Sign In</h2>
           <div className="form-group">
             <label htmlFor="username" className="sr-only">
               Employer Code
