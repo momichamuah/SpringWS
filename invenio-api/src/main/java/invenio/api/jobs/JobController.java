@@ -15,11 +15,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import invenio.api.employer.EmployerModel;
+import invenio.api.employer.EmployerService;
+import invenio.api.jobseeker.JobSeekerModel;
+import invenio.api.jobseeker.JobSeekerService;
+import invenio.api.utils.WebUtils;
+
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class JobController {
 	@Autowired
 	JobService service;
+	@Autowired
+	private WebUtils webUtils;	
+	@Autowired
+	private EmployerService empservice;
+	@Autowired
+	private JobSeekerService jsservice;
 	
 	@RequestMapping("/jobs")
 	public List<JobModel> getAllJobs() {
@@ -54,6 +66,42 @@ public class JobController {
 		service.addJob(Job);
 		
 	} 
+	@RequestMapping(method=RequestMethod.POST, value="/jobs/jobseeker")
+	public void addJob(@RequestBody JobJobSeeker jjSeeker) {
+		String to="";
+		String msg="";
+		String subject="";
+		service.addJobJobSeeker(jjSeeker);
+		Optional<JobModel> job = service.getJob(jjSeeker.getJobID());
+		if(job.isPresent()) {
+			Optional<EmployerModel> empModel = empservice.getEmployer(job.get().getEmployer().getEmpCode());
+			if(empModel.isPresent()) {
+				to = empModel.get().getEmail();
+				Optional<JobSeekerModel> jsModel = jsservice.getJobSeeker(jjSeeker.getJsID());
+				if(jsModel.isPresent()) {
+					subject = jsModel.get().getFirstLastName() + " is interested for Job: " + jjSeeker.getJsID();
+					msg = "Hello " + empModel.get().getEmpName() + "," +  System.lineSeparator() +  System.lineSeparator() +
+							jsModel.get().getFirstLastName() + " has shown interest for the job " + jsModel.get().getJsId() + ":" + job.get().getJobTitle() + System.lineSeparator() +
+							"You may reach the candidate by " + jsModel.get().getEmail();
+					webUtils.sendMail(to, msg, subject);
+							
+				}
+			}
+		}
+		
+	} 
+	
+	@RequestMapping(value="/jobs/jobseeker/{jsID}/{jobID}",produces=MediaType.APPLICATION_JSON_VALUE,method = RequestMethod.GET)	
+	@ResponseBody
+	public ResponseEntity<Optional<JobJobSeeker>> findByJobSeeker(@PathVariable Long jsID, @PathVariable Long jobID) {
+		System.out.println("controller jsId:" + jsID);
+		Optional<JobJobSeeker> jjseeker = service.getJobJobSeeker(jsID, jobID);
+		if( jjseeker.isPresent()) {
+			return new ResponseEntity<>( jjseeker, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+	}
 	
 	@RequestMapping(method=RequestMethod.PUT, value="/jobs")
 	public void updateJob(@RequestBody JobModel Job) {

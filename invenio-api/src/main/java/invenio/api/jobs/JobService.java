@@ -15,45 +15,58 @@ public class JobService {
 	JobRepository jobRepository;
 	@Autowired
 	EmployerRepository empRepo;
-	
-	public List<JobModel> getAllJobs(){
-		//return topics;
-		List<JobModel> Jobs = new ArrayList<>(); 
-		jobRepository.findAll()
-		.forEach(Jobs::add);
+	@Autowired
+	JobJobSeekerRepository jjRepo;
+
+	public List<JobModel> getAllJobs() {
+		// return topics;
+		List<JobModel> Jobs = new ArrayList<>();
+		jobRepository.findAll().forEach(Jobs::add);
 		return Jobs;
 	}
+
 	public Optional<JobModel> getJob(Long jobId) {
 		return jobRepository.findById(jobId);
-		
+
 	}
-	/*public List<JobModel> findByEmployer(String empCode) {
-		System.out.println("empCode: " + empCode);
-		Optional<EmployerModel> result = empRepo.findById(empCode);
-		if(result.isPresent()) {
-			System.out.println("result.isPresent");
-			return jobRepository.findByEmployer(result);
-		}
-		System.out.println("null");
-		return null;
-	}*/
+
+	/*
+	 * public List<JobModel> findByEmployer(String empCode) {
+	 * System.out.println("empCode: " + empCode); Optional<EmployerModel> result =
+	 * empRepo.findById(empCode); if(result.isPresent()) {
+	 * System.out.println("result.isPresent"); return
+	 * jobRepository.findByEmployer(result); } System.out.println("null"); return
+	 * null; }
+	 */
 	public List<JobModel> findByEmployer(String empCode) {
 
-			return jobRepository.findByEmployer(empCode);
+		return jobRepository.findByEmployer(empCode);
 	}
+
 	public void addJob(JobModel Job) {
 		jobRepository.save(Job);
 	}
-	
+	public void addJobJobSeeker(JobJobSeeker jobJobSeeker) {
+		jjRepo.save(jobJobSeeker);
+	}
+	public Optional<JobJobSeeker> getJobJobSeeker(Long jsId, Long jobId) {
+		Optional<List<JobJobSeeker>> result = jjRepo.getJJRecord(jsId, jobId);
+		if(result!=null && result.get().size()>0)
+			return Optional.of(result.get().get(0));
+		return null;
+	}
+
 	public void updateJob(JobModel Job) {
 		jobRepository.save(Job);
-		
+
 	}
+
 	public void deleteJob(Long jobId) {
 		jobRepository.deleteById(jobId);
 	}
+
 	public List<JobModel> findByJobSeeker(Long jsID) {
 
 		return jobRepository.findByJobSeeker(jsID);
-}
+	}
 }

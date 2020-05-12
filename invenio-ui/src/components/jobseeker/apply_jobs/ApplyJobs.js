@@ -5,20 +5,13 @@ class ApplyJobs extends Component {
   state = {
     jobs: [],
     jobSeekerModel: [],
+    jobjobseeker: {
+      jsID: 0,
+      jobID: 0,
+    },
   };
   componentDidMount() {
     console.log("componentDidMount");
-    axios
-      .get(
-        "http://localhost:5001/invenio/jobs/jobseeker/" +
-          localStorage.getItem("loggedInJobSeeker")
-      )
-      .then((response) => {
-        this.setState({
-          jobs: response.data,
-        });
-      });
-
     axios
       .get(
         "http://localhost:5001/invenio/jobseekers/" +
@@ -30,10 +23,21 @@ class ApplyJobs extends Component {
         });
         console.log(this.state.jobSeekerModel);
       });
+    axios
+      .get(
+        "http://localhost:5001/invenio/jobs/jobseeker/" +
+          localStorage.getItem("loggedInJobSeeker")
+      )
+      .then((response) => {
+        this.setState({
+          jobs: response.data,
+        });
+      });
   }
   getmatches(params) {
     let tempTags = params;
-    let m=0;
+    let m = 0;
+
     tempTags.forEach((t) => {
       if (this.state.jobSeekerModel.tags.some((v) => v.tag === t.tag)) {
         m++;
@@ -42,6 +46,71 @@ class ApplyJobs extends Component {
     });
     return m;
   }
+  canapply(jobid) {
+    const jsid = localStorage.getItem("loggedInJobSeeker");
+
+    axios
+      .get("http://localhost:5001/invenio/jobs/jobseeker/" + jsid + "/" + jobid)
+      .then((response) => {
+        //alert("canapply already applied");
+        console.log(this.state.jobSeekerModel);
+        return false;
+      })
+      .catch((error) => {
+        //display some error messages
+        //alert("canapply error");
+        //alert(error);
+        return true;
+      });
+    //alert("canapply true");
+    return true;
+  }
+
+  handleApplyClick = (event) => {
+    event.preventDefault();
+    const jobid = event.target.name;
+    const jsid = localStorage.getItem("loggedInJobSeeker");
+    let alreadyapplied = false;
+    // alert(jobid + ":" + jsid);
+    axios
+      .get("http://localhost:5001/invenio/jobs/jobseeker/" + jsid + "/" + jobid)
+      .then((response) => {
+        alert("already applied");
+        console.log(this.state.jobSeekerModel);
+        alreadyapplied = true;
+        return;
+      })
+      .catch((error) => {
+        //display some error messages
+        //alert("not applied");
+      });
+    const tempjobjobseeker = { ...this.state.jobjobseeker };
+    tempjobjobseeker.jsID = jsid;
+    tempjobjobseeker.jobID = jobid;
+    this.setState({
+      jobjobseeker: tempjobjobseeker,
+    });
+    console.log(this.state.jobjobseeker);
+    alert(alreadyapplied);
+    if (alreadyapplied === false) {
+      axios
+        .post(
+          "http://localhost:5001/invenio/jobs/jobseeker",
+          this.state.jobjobseeker
+        )
+        .then((response) => {
+          //navigate to a thankyou page
+          console.log(response);
+          //alert("Job applied, SUCCESS !!");
+          //store the LoggedInUser
+        })
+        .catch((error) => {
+          //display some error messages
+          axios.post("Error in saving");
+        });
+    }
+  };
+
   render() {
     console.log("render");
 
@@ -56,21 +125,28 @@ class ApplyJobs extends Component {
           })}
         </td>
         <td>{job.tagMatch}</td>
-        <td>{this.getmatches(job.tags )}</td>
+        <td>{this.getmatches(job.tags)}</td>
         <td>
-        {this.getmatches(job.tags )>=job.tagMatch?(<button
-            type="submit"
-            className="btn btn-outline-success my-2 my-sm-0"
-            
-          >
-            Apply
-          </button>):("")}
+          {this.getmatches(job.tags) >= job.tagMatch ? (
+            this.canapply(job.jobID) ? (
+              <button
+                type="submit"
+                className="btn btn-outline-success my-2 my-sm-0"
+                name={job.jobID}
+                onClick={this.handleApplyClick}
+              >
+                Apply
+              </button>
+            ) : (
+              "Already applied"
+            )
+          ) : (
+            ""
+          )}
         </td>
       </tr>
     ));
     //let dispTags =  this.state.jobSeekerModel.tags.toString();
-    
-  
 
     return (
       <div className="container">
@@ -78,10 +154,7 @@ class ApplyJobs extends Component {
           <div className="table-title">
             <div className="row">
               <div className="col-sm-8">
-                <h2>
-                  Jobs Match Result with Skills:{" "} {}
-                  
-                </h2>
+                <h2>Jobs Match Result with Skills: {}</h2>
               </div>
             </div>
           </div>

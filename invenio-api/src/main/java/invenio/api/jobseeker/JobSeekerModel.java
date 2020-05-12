@@ -46,6 +46,9 @@ public class JobSeekerModel {
 	public String getFirstName() {
 		return firstName;
 	}
+	public String getFirstLastName() {
+		return firstName + " " + lastName;
+	}
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
