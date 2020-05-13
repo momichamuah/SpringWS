@@ -4,7 +4,7 @@ import axios from "axios";
 class EditProfile extends Component {
   state = {
     jobSeekerModel: [],
-    selectedFile: null,
+    selectedFile: undefined,
     uploadedFile: undefined
   };
   componentDidMount() {
@@ -114,7 +114,7 @@ class EditProfile extends Component {
               <tr>
                 <td>Profile Picture</td>
                 <td>
-                  { this.state.uploadedFile ? <img src={`${process.env.PUBLIC_URL}/images/upload/jobseekers/${localStorage.getItem("loggedInJobSeeker")}/profile/${this.state.uploadedFile}`} alt="" /> : ""}
+                  { this.state.uploadedFile ? <img className="container" src={`${process.env.PUBLIC_URL}/images/upload/jobseekers/${localStorage.getItem("loggedInJobSeeker")}/profile/${this.state.uploadedFile}`} alt=""  /> : ""}
                 </td>
               </tr>
               <tr>

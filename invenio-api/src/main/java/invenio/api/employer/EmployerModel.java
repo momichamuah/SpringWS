@@ -32,7 +32,7 @@ public class EmployerModel {
 	
 	//@JsonIgnore
 	@JsonManagedReference
-	@OneToMany(mappedBy="employer", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="employer", cascade=CascadeType.ALL, orphanRemoval=true)
 	List<JobModel> jobs;
 	
 	public EmployerModel() {}

@@ -32,7 +32,7 @@ public class JobSeekerModel {
 	String information;
 	
 	@JsonManagedReference
-	@OneToMany(mappedBy="jobseeker", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="jobseeker", cascade=CascadeType.ALL, orphanRemoval = true)
 	List<TagJobseekerModel> tags;
 
 	public Long getJsId() {

@@ -104,6 +104,7 @@ class ManageSkills extends Component {
       jobSeekerModel: tempModel,
     });
     console.log(this.state.jobSeekerModel);
+    console.log("on drop completed");
     console.log(completed_tasks);
   };
   render() {

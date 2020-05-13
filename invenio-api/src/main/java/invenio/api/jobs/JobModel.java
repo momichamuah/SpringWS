@@ -38,7 +38,7 @@ public class JobModel {
 	}
 	
 	@JsonManagedReference
-	@OneToMany(mappedBy="job", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="job", cascade=CascadeType.ALL, orphanRemoval=true)
 	List<TagJobModel> tags;
 	
 	@JsonBackReference

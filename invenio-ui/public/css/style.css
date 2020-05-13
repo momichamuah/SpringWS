@@ -445,7 +445,10 @@ pre {
 .pre-scrollable {
   max-height: 340px;
   overflow-y: scroll; }
-
+  .container img {
+    width: auto;
+    height: 200px;
+}
 .container {
   width: 100%;
   padding-right: 15px;

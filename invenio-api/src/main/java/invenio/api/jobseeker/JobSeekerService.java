@@ -28,6 +28,7 @@ public class JobSeekerService {
 	}
 	
 	public void updateJobSeeker(JobSeekerModel JobSeeker) {
+		//repository.deleteUsingSingleQuery(JobSeeker.getJsId());
 		repository.save(JobSeeker);
 		
 	}
