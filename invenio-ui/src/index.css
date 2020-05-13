@@ -11,6 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+.profile-image
+{
+  width: 180px;
+  height: 180px;
+  margin: 0 0 30px 0;
+  border-radius: 50%;
+}
 .middle {
   display: inline-block;
   margin-left: 50%;

@@ -8,14 +8,17 @@ class JobSeekerLanding extends Component {
   jobSeekerSignout = () => {
     localStorage.removeItem("loggedInJobSeeker");
     localStorage.removeItem("loggedInJobSeekerName");
+    localStorage.removeItem("loggedInJobSeekerImage");
     this.props.history.push("/home");
   };
   render() {
+    console.log(localStorage.getItem("loggedInJobSeekerImage"));
     return (
       <div className="container-fluid home-margin-top-less-200px">
         <div>
-          <h1>For JobSeeker</h1>
-          {localStorage.getItem("loggedInJobSeekerName")}
+          
+          <img className="profile-image" src={`${process.env.PUBLIC_URL}/images/upload/jobseekers/${localStorage.getItem("loggedInJobSeeker")}/profile/${localStorage.getItem("loggedInJobSeekerImage")}`} alt=""  />
+          <h2>{localStorage.getItem("loggedInJobSeekerName")}</h2>
           {/*       <Link to="/home" className="nav-link" onClick={this.jobSeekerSignout}>
           Sign Out, {localStorage.getItem("loggedInJobSeekerName")}
       </Link>                

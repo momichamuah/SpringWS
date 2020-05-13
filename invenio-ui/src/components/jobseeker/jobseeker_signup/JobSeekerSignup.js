@@ -40,7 +40,10 @@ class JobSeekerSignup extends Component {
             " " +
             this.state.jobSeekerModel.lastName
         );
-
+        localStorage.setItem(
+          "loggedInJobSeekerImage",
+          this.state.jobSeekerModel.image
+        );
         this.props.jobSeekerLogin();
         this.props.history.push("/jobseeker-landing");
         //axios.post('Saved');
@@ -63,7 +66,7 @@ class JobSeekerSignup extends Component {
     return (
       <div className="middle formcontainer">
         <form onSubmit={this.handleSubmit}>
-          <h3 style={{ color: '#ff6347' }}> JobSeeker Sign Up</h3>
+          <h3 style={{ color: "#ff6347" }}> JobSeeker Sign Up</h3>
           <div className="row mb-2">
             <div className="col">
               <input
@@ -131,7 +134,7 @@ class JobSeekerSignup extends Component {
             </div>
           </div>
           <div class="form-group">
-            <p style={{ color: '#ff6347' }}>
+            <p style={{ color: "#ff6347" }}>
               Already registered? <Link to="/jobseeker-login">Sign In</Link>
             </p>
           </div>

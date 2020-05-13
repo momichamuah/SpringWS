@@ -14,7 +14,7 @@ class EditProfile extends Component {
           localStorage.getItem("loggedInJobSeeker")
       )
       .then((response) => {
-        console.log("USEr ::> ", response.data)
+        console.log("User ::> ", response.data)
         this.setState({
           jobSeekerModel: response.data,
           uploadedFile: response.data.image,

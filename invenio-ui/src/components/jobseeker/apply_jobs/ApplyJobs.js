@@ -4,7 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 class ApplyJobs extends Component {
   state = {
     jobs: [],
-    jobSeekerModel: [],
+    jobSeekerModel: undefined,
     jobjobseeker: {
       jsID: 0,
       jobID: 0,
@@ -154,7 +154,12 @@ class ApplyJobs extends Component {
           <div className="table-title">
             <div className="row">
               <div className="col-sm-8">
-                <h2>Jobs Match Result with Skills: {}</h2>
+                <h2>
+                  Jobs Match Result with Skills:{" "}
+                  <span style={{ color: '#ff6347' }}>{this.state.jobSeekerModel?this.state.jobSeekerModel.tags.map(function (item) {
+                    return item["tag"] + ",  ";
+                  }):""}</span>
+                </h2>
               </div>
             </div>
           </div>

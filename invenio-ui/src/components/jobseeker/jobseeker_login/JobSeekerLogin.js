@@ -41,6 +41,10 @@ class JobSeekerLogin extends Component {
                     "loggedInJobSeekerName",
                     this.state.jobSeekerModel.firstName + " " + this.state.jobSeekerModel.lastName
                 );
+                localStorage.setItem(
+                    "loggedInJobSeekerImage",
+                    this.state.jobSeekerModel.image
+                );
                 console.log(localStorage.getItem("loggedInJobSeeker"));
                 console.log(localStorage.getItem("loggedInJobSeekerName"));
                 //navigate to a home page
