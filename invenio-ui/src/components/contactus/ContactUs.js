@@ -26,12 +26,12 @@ class ContactUs extends Component {
               <div class="col-md-3">
                 <p>
                   <span>Email:</span>{" "}
-                  <a href="mailto:info@yoursite.com">info@yoursite.com</a>
+                  <a href="mailto:info@invenio.com">info@invenio.com</a>
                 </p>
               </div>
               <div class="col-md-3">
                 <p>
-                  <span>Website</span> <a href="#">yoursite.com</a>
+                  <span>Website</span> <a href="#">invenio.com</a>
                 </p>
               </div>
             </div>
