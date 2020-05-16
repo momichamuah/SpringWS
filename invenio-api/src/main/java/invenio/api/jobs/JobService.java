@@ -51,8 +51,10 @@ public class JobService {
 	}
 	public Optional<JobJobSeeker> getJobJobSeeker(Long jsId, Long jobId) {
 		Optional<List<JobJobSeeker>> result = jjRepo.getJJRecord(jsId, jobId);
-		if(result!=null && result.get().size()>0)
+		if(result.isPresent() && result.get().size()>0) {
+			
 			return Optional.of(result.get().get(0));
+		}
 		return null;
 	}
 
@@ -66,7 +68,10 @@ public class JobService {
 	}
 
 	public List<JobModel> findByJobSeeker(Long jsID) {
-
-		return jobRepository.findByJobSeeker(jsID);
+		List<JobModel> result = jobRepository.findByJobSeeker(jsID);
+		/*for(JobModel j:result) {
+			j.isJobAppliedBySeeker= jjRepo.getJJRecord(jsID, j.getJobID()).isPresent();
+		}*/
+		return result;
 	}
 }

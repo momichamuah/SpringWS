@@ -96,7 +96,7 @@ public class JobController {
 	public ResponseEntity<Optional<JobJobSeeker>> findByJobSeeker(@PathVariable Long jsID, @PathVariable Long jobID) {
 		System.out.println("controller jsId:" + jsID);
 		Optional<JobJobSeeker> jjseeker = service.getJobJobSeeker(jsID, jobID);
-		if( jjseeker.isPresent()) {
+		if( jjseeker!=null && jjseeker.isPresent()) {
 			return new ResponseEntity<>( jjseeker, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

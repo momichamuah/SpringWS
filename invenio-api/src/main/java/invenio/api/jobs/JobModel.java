@@ -11,10 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.CascadeType;
 
@@ -29,14 +32,10 @@ public class JobModel {
 	String jobTitle;
 	String jobDescription;
 	int tagMatch;
-	public int getTagMatch() {
-		return tagMatch;
-	}
-
-	public void setTagMatch(int tagMatch) {
-		this.tagMatch = tagMatch;
-	}
 	
+	@Transient
+	@JsonProperty
+	boolean isJobAppliedBySeeker=false;
 	@JsonManagedReference
 	@OneToMany(mappedBy="job", cascade=CascadeType.ALL, orphanRemoval=true)
 	List<TagJobModel> tags;
@@ -85,5 +84,13 @@ public class JobModel {
 	public void setEmployer(EmployerModel employer) {
 		this.employer = employer;
 	}
+	public int getTagMatch() {
+		return tagMatch;
+	}
+
+	public void setTagMatch(int tagMatch) {
+		this.tagMatch = tagMatch;
+	}
+	
 	
 }

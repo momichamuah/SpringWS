@@ -6,10 +6,37 @@ class ApplyJobs extends Component {
     jobs: [],
     jobSeekerModel: undefined,
     jobjobseeker: {
-      jsID: 0,
-      jobID: 0,
+      jsID: undefined,
+      jobID: undefined,
     },
   };
+  canapply(jobid) {
+    const jsid = localStorage.getItem("loggedInJobSeeker");
+    console.log("in canapply" + jobid);
+    axios
+      .get("http://localhost:5001/invenio/jobs/jobseeker/" + jsid + "/" + jobid)
+      .then((response) => {
+        console.log("canapply already applied");
+        console.log(this.state.jobSeekerModel);
+        console.log("canapply obj");
+        console.log(this.state.jobs.find((obj) => obj.jobID === jobid));
+        this.state.jobs.find(
+          (obj) => obj.jobID === jobid
+        ).isJobAppliedBySeeker = true;
+        this.setState({
+          jobs: this.state.jobs,
+        });
+        console.log("after");
+        console.log(this.state.jobs.find((obj) => obj.jobID === jobid));
+        console.log("canapply obj found");
+      })
+      .catch((error) => {
+        //display some error messages
+        console.log("canapply error");
+        console.log(error);
+      });
+    console.log("canapply true");
+  }
   componentDidMount() {
     console.log("componentDidMount");
     axios
@@ -21,7 +48,14 @@ class ApplyJobs extends Component {
         this.setState({
           jobSeekerModel: response.data,
         });
+        console.log("componentDidMount success jobSeekerModel");
         console.log(this.state.jobSeekerModel);
+      })
+      .catch((error) => {
+        //display some error messages
+        console.log("componentDidMount error jobSeekerModel");
+        console.log(error);
+        return true;
       });
     axios
       .get(
@@ -32,6 +66,18 @@ class ApplyJobs extends Component {
         this.setState({
           jobs: response.data,
         });
+        console.log("componentDidMount success jobs");
+        console.log(this.state.jobs);
+        this.state.jobs.forEach((t) => {
+          this.canapply(t.jobID);
+        });
+        console.log(this.state.jobs);
+      })
+      .catch((error) => {
+        //display some error messages
+        console.log("componentDidMount error jobs");
+        console.log(error);
+        return true;
       });
   }
   getmatches(params) {
@@ -46,31 +92,12 @@ class ApplyJobs extends Component {
     });
     return m;
   }
-  canapply(jobid) {
-    const jsid = localStorage.getItem("loggedInJobSeeker");
-
-    axios
-      .get("http://localhost:5001/invenio/jobs/jobseeker/" + jsid + "/" + jobid)
-      .then((response) => {
-        //alert("canapply already applied");
-        console.log(this.state.jobSeekerModel);
-        return false;
-      })
-      .catch((error) => {
-        //display some error messages
-        //alert("canapply error");
-        //alert(error);
-        return true;
-      });
-    //alert("canapply true");
-    return true;
-  }
 
   handleApplyClick = (event) => {
     event.preventDefault();
     const jobid = event.target.name;
     const jsid = localStorage.getItem("loggedInJobSeeker");
-    let alreadyapplied = false;
+    /*let alreadyapplied = false;
     // alert(jobid + ":" + jsid);
     axios
       .get("http://localhost:5001/invenio/jobs/jobseeker/" + jsid + "/" + jobid)
@@ -83,37 +110,41 @@ class ApplyJobs extends Component {
       .catch((error) => {
         //display some error messages
         //alert("not applied");
-      });
-    const tempjobjobseeker = { ...this.state.jobjobseeker };
+      });*/
+      console.log("handleApplyClick");
+    let tempjobjobseeker = { ...this.state.jobjobseeker };
     tempjobjobseeker.jsID = jsid;
     tempjobjobseeker.jobID = jobid;
+    console.log(tempjobjobseeker);
     this.setState({
-      jobjobseeker: tempjobjobseeker,
-    });
-    console.log(this.state.jobjobseeker);
-    //alert(alreadyapplied);
-    if (alreadyapplied === false) {
-      axios
-        .post(
-          "http://localhost:5001/invenio/jobs/jobseeker",
-          this.state.jobjobseeker
-        )
-        .then((response) => {
-          //navigate to a thankyou page
-          console.log(response);
-          //alert("Job applied, SUCCESS !!");
-          //store the LoggedInUser
-        })
-        .catch((error) => {
-          //display some error messages
-          axios.post("Error in saving");
-        });
-    }
-  };
+      jobjobseeker: tempjobjobseeker},
+      ()=>   axios
+            .post(
+              "http://localhost:5001/invenio/jobs/jobseeker",
+              this.state.jobjobseeker
+            )
+            .then((response) => {
+              //navigate to a thankyou page
+              console.log("handleApplyClick post response");
+              console.log(response);
+              //alert("Job applied, SUCCESS !!");
+              //store the LoggedInUser
+              //this.canapply(jobid);
+              this.componentDidMount();
+            })
+            .catch((error) => {
+              //display some error messages
+              axios.post("Error in saving");
+            })
+          
+    );
+    
+    
+  }
 
   render() {
     console.log("render");
-
+    console.log(this.state.jobs);
     let tabledata = this.state.jobs.map((job, index) => (
       <tr>
         <td>{job.jobID}</td>
@@ -128,7 +159,7 @@ class ApplyJobs extends Component {
         <td>{this.getmatches(job.tags)}</td>
         <td>
           {this.getmatches(job.tags) >= job.tagMatch ? (
-            this.canapply(job.jobID) ? (
+            job.isJobAppliedBySeeker === false ? (
               <button
                 type="submit"
                 className="btn btn-outline-success my-2 my-sm-0"
@@ -138,7 +169,7 @@ class ApplyJobs extends Component {
                 Apply
               </button>
             ) : (
-              "Already applied"
+              <span style={{ color: "#ff6347" }}>Already applied </span>
             )
           ) : (
             ""
@@ -156,9 +187,13 @@ class ApplyJobs extends Component {
               <div className="col-sm-8">
                 <h2>
                   Jobs Match Result with Skills:{" "}
-                  <span style={{ color: '#ff6347' }}>{this.state.jobSeekerModel?this.state.jobSeekerModel.tags.map(function (item) {
-                    return item["tag"] + ",  ";
-                  }):""}</span>
+                  <span style={{ color: "#ff6347" }}>
+                    {this.state.jobSeekerModel
+                      ? this.state.jobSeekerModel.tags.map(function (item) {
+                          return item["tag"] + ",  ";
+                        })
+                      : ""}
+                  </span>
                 </h2>
               </div>
             </div>
